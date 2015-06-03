@@ -1,0 +1,26 @@
+name: gt-core
+version: 0.0.0
+cabal-version: >=1.6
+build-type: Simple
+--license: AllRightsReserved
+--license-file: ""
+copyright: (c) Dmitry K
+stability: dev
+synopsis: gt
+author: fehu
+--data-dir: ""
+
+library
+    build-depends: base -any, containers -any
+    exposed: True
+    exposed-modules: Tile
+    buildable: True
+    hs-source-dirs: src
+--    other-modules:
+
+
+executable gt-run
+    build-depends: base -any
+    main-is: Main.hs
+    buildable: True
+    hs-source-dirs: src
