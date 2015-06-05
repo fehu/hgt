@@ -2,25 +2,31 @@ name: gt-core
 version: 0.0.0
 cabal-version: >=1.6
 build-type: Simple
---license: AllRightsReserved
---license-file: ""
+license: todo
+license-file: ""
 copyright: (c) Dmitry K
 stability: dev
-synopsis: gt
 author: fehu
---data-dir: ""
+data-dir: ""
 
 library
-    build-depends: base -any, containers -any
+    build-depends: base -any,
+                   containers -any,
+                   transformers -any,
+                   OpenGL -any,
+                   GLUT -any
+    exposed-modules: Tiles
+                     OpenGLRenderer
+                     TileRenderer
     exposed: True
-    exposed-modules: Tile
     buildable: True
     hs-source-dirs: src
---    other-modules:
-
+    other-modules: TestTiles TestTilesRenderer
 
 executable gt-run
     build-depends: base -any
     main-is: Main.hs
     buildable: True
     hs-source-dirs: src
+
+
