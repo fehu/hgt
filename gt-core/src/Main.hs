@@ -14,6 +14,16 @@ player2 = Owner "2" "__player__"
 
 coords :: [TileId]
 coords = [Coordinate x y | x <- [0, 1], y <- [0, 1]]
+--coords = do
+--    x <- [0, 1]
+--    y <- [0, 1]
+--    return $ Coordinate x y
+--coords = [0, 1] >>= (
+--    \x -> [0, 1] >>= (
+--        \y ->
+--            return $ Coordinate x y
+--        )
+--    )
 
 tls :: [TT.Tile]
 tls = [
