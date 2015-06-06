@@ -50,8 +50,8 @@ mkMapRenderer before after beforeRender visibles render camera mapRef = [before,
                                  let rendSeq = forM toRender $ \t -> do
                                         tRef <- newIORef t
                                         return $ beforeRender t : render tRef
-                                 let rendOrd  = fmap transpose rendSeq
-                                 ioLayers <- fmap (map sequence_) rendOrd
+                                 let rendSeq' = fmap transpose rendSeq
+                                 ioLayers <- fmap (map sequence_) rendSeq'
 --                                 let x = ioLayers :: [IO ()]
                                  sequence_ ioLayers
 
