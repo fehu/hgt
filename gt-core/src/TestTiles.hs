@@ -17,9 +17,9 @@ module TestTiles (
 ) where
 
 import Tiles
+import TileRenderer (Point)
 
-data Coordinate = Coordinate Int Int
-                deriving (Show, Eq, Ord)
+type Coordinate = Point Int
 
 type TileId = Coordinate
 

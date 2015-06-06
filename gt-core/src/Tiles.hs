@@ -12,7 +12,12 @@ module Tiles (
 import Data.Map as DMap
 
 
-data Tile  id tpe state content = Tile id tpe state [content]
+data Tile  id tpe state content = Tile {
+                                         id :: id
+                                       , tpe :: tpe
+                                       , state :: state
+                                       , contents :: [content]
+                                       }
 
 type Tiles id tpe state content = DMap.Map id (Tile id tpe state content)
 
