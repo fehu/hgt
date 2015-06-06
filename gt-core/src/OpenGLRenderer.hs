@@ -8,7 +8,7 @@ import Data.IORef
 import Graphics.UI.GLUT
 
 
-type Renderer w = IORef w -> DisplayCallback
+type Renderer w = IORef w -> [DisplayCallback]
 type Mutator  w = IORef w -> IO()
 
 -- from https://mail.haskell.org/pipermail/beginners/2010-November/005709.html
@@ -20,7 +20,7 @@ run display change reshaped world = do  getArgsAndInitialize
                                         worldM <- newIORef world
 
                                         reshapeCallback $= reshaped
-                                        displayCallback $= (display worldM)
+                                        displayCallback $= sequence_ (display worldM)
                                         idleCallback $= fmap ($ worldM) change
 
                                         mainLoop

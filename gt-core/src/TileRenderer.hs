@@ -13,18 +13,19 @@ import OpenGLRenderer
 import Tiles
 
 import Data.IORef
-import Control.Monad( forM_ )
+import Data.List
+import Control.Monad( forM, mapM )
 import Data.Traversable( for )
 
 import GHC.Float.RealFracMethods
 
 import Graphics.Rendering.OpenGL.GL.CoordTrans
 import Graphics.Rendering.OpenGL.GL.Tensor
-import Graphics.UI.GLUT (GLfloat, GLint, Color3(..))
+import Graphics.UI.GLUT (GLfloat, GLint, Color3(..), DisplayCallback)
 
 
 type MapRenderer  id tpe state content = Renderer (Tiles.Map id tpe state content)
-type TileRenderer id tpe state content = Tile id tpe state content -> IO()
+type TileRenderer id tpe state content = Renderer (Tile      id tpe state content)
 
 data Point a = Point {
                 x :: a
@@ -43,13 +44,16 @@ mkMapRenderer ::   IO()
                 -> TileRenderer id tpe state content
                 -> Camera a
                 -> MapRenderer id tpe state content
-mkMapRenderer before after beforeRender visibles render camera =
-    \mapRef -> do Tiles.Map theTiles _  <- readIORef mapRef
-                  let toRender = visibles theTiles camera
-
-                  before
-                  forM_ toRender $ \t -> sequence[beforeRender t, render t]
-                  after
+mkMapRenderer before after beforeRender visibles render camera mapRef = [before, renderers, after]
+            where renderers = do Tiles.Map theTiles _  <- readIORef mapRef
+                                 let toRender = visibles theTiles camera
+                                 let rendSeq = forM toRender $ \t -> do
+                                        tRef <- newIORef t
+                                        return $ beforeRender t : render tRef
+                                 let rendOrd  = fmap transpose rendSeq
+                                 ioLayers <- fmap (map sequence_) rendOrd
+--                                 let x = ioLayers :: [IO ()]
+                                 sequence_ ioLayers
 
 
 glFloat :: Float -> GLfloat
