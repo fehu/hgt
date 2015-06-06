@@ -62,7 +62,8 @@ mkSize w h = Size (glInt w) (glInt h)
 
 render :: Renderer World
 render = renderMap before after fixedCamera
-      where before = do putStrLn "clear"
+      where before = do let sc = 1.3e-3
+--                        scale sc sc (sc :: GLfloat)
                         clear [ColorBuffer]
             after  = flush
 

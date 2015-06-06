@@ -48,7 +48,7 @@ mkMapRenderer before after beforeRender visibles render camera =
                   let toRender = visibles theTiles camera
 
                   before
-                  forM_ toRender $ \t -> preservingMatrix $ sequence[beforeRender t, render t]
+                  forM_ toRender $ \t -> sequence[beforeRender t, render t]
                   after
 
 
