@@ -55,10 +55,10 @@ translatePrimitives tile = do let (cx, cy) = translateShift tile
                               putStrLn $ "translate: " ++ show cx  ++ ", " ++ show cy
 
 translateText tile pos = do let (cx, cy) = translateShift tile
-                            let x = (fst pos + cx)
-                            let y = (snd pos + cy)
+                            let x = cx + fst pos
+                            let y = cy + snd pos
                             loadIdentity
-                            translate $ Vector3 cx cy 0
+                            translate $ Vector3 (x - 1) (y - 1) 0
 --                            rasterPos $ Vertex2 x y
                             putStrLn $ "translate txt  : " ++ show x  ++ ", " ++ show y
 
@@ -73,7 +73,7 @@ renderTile tileRef = [primitives, text]
                                   tileQuad z
               text       = do tile <- readIORef tileRef
                               color $ rgb2GLcolor 0 0 0
-                              translateText tile (0, 0)
+                              translateText tile (0.25, 0.8)
                               scale sc sc (sc :: GLfloat)
                               -- Weather
                               putStrLn $ "render string" ++ show tile
