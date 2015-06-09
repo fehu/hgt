@@ -29,9 +29,11 @@ coords = [Point x y | x <- [0, 1], y <- [0, 1]]
 tls :: [TT.Tile]
 tls = [
         Tile (Point 0 0) Sea       (Nothing,      Storm)   []
-      , Tile (Point 0 1) Plain     (Just player1, Cloudy)  []
-      , Tile (Point 1 0) Hill      (Just player2, Rain)    []
-      , Tile (Point 1 1) Mountain  (Nothing,      Sunny)   []
+      , Tile (Point 0 1) Sea       (Nothing,      Storm)   []
+      , Tile (Point 1 0) Sea       (Nothing,      Rain)    []
+      , Tile (Point 1 1) Plain     (Just player1, Cloudy)  []
+      , Tile (Point 2 0) Hill      (Just player2, Rain)    []
+      , Tile (Point 2 1) Mountain  (Nothing,      Sunny)   []
       ]
 
 neighbours :: Neighbours TileId
@@ -41,16 +43,16 @@ neighbours = fromList $ map f tls
 type World = TT.Map
 
 world :: World
-world = Tiles.Map (mkTiles tls) neighbours
+world = Tiles.Map (mkTiles tls) Main.neighbours
 
 
 reshaped ::  ReshapeCallback --Mutator World
 reshaped size = do putStrLn $ "viewport"
-                   viewport $= (mkPosition 0 0, size) -- mkSize 200 200
+                   viewport $= (mkPosition 0 0, mkSize 200 200) -- size
                    postRedisplay Nothing
 
 fixedCamera = Camera { topLeft      = Point 0 0
-                     , bottomRight  = Point 1 1
+                     , bottomRight  = Point 2 2
                      }
 
 mkPosition :: Int -> Int -> Position

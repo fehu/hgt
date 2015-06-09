@@ -37,19 +37,22 @@ data Camera a = Camera{
                 , bottomRight   :: Point  a
                 } deriving Show
 
-mkMapRenderer ::   IO()
+mkMapRenderer :: Num a =>
+                   IO()
                 -> IO()
                 -> (Tile id tpe state content -> IO())
                 -> (Tiles id tpe state content -> Camera a -> [Tile id tpe state content])
-                -> TileRenderer id tpe state content
+                -> ((a, a) -> TileRenderer id tpe state content)
                 -> Camera a
                 -> MapRenderer id tpe state content
 mkMapRenderer before after beforeRender visibles render camera mapRef = [before, renderers, after]
             where renderers = do Tiles.Map theTiles _  <- readIORef mapRef
                                  let toRender = visibles theTiles camera
+                                 let s q = (q . bottomRight $ camera) - (q . topLeft $ camera) + 1
+                                 let size = (s x, s y)
                                  let rendSeq = forM toRender $ \t -> do
                                         tRef <- newIORef t
-                                        return $ beforeRender t : render tRef
+                                        return $ beforeRender t : render size tRef
                                  let rendSeq' = fmap transpose rendSeq
                                  ioLayers <- fmap (map sequence_) rendSeq'
 --                                 let x = ioLayers :: [IO ()]
