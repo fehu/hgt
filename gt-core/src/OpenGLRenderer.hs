@@ -16,24 +16,28 @@ type Mutator  w = IORef w -> IO()
 -- from https://mail.haskell.org/pipermail/beginners/2010-November/005709.html
 
 
-data Callbacks = Callbacks { callReshape :: Maybe (Window -> ReshapeCallback)
-                           , callKey     :: Maybe (Window -> KeyboardCallback)
-                           , callSpecKey :: Maybe (Window -> SpecialCallback)
-                           }
+data Callbacks state = Callbacks { callReshape :: Maybe (Window -> state -> ReshapeCallback)
+                                 , callKey     :: Maybe (Window -> state -> KeyboardCallback)
+                                 , callSpecKey :: Maybe (Window -> state -> SpecialCallback)
+                                 }
 
 
-run :: Renderer w -> Maybe (Mutator w) -> Callbacks -> w -> IO()
-run display change callbacks world = do getArgsAndInitialize
-                                        _window <- createWindow "Test"
+run :: IO state -> (state -> Renderer w) -> Maybe (Mutator w) -> Callbacks state -> w -> IO()
+run stateIO display change callbacks world = do
+                        getArgsAndInitialize
+                        _window <- createWindow "Test"
 
-                                        worldM <- newIORef world
+                        worldM   <- newIORef world
+                        state <- stateIO
 
-                                        reshapeCallback $= (fmap ($ _window) $ callReshape callbacks)
-                                        displayCallback $= sequence_ (display worldM)
-                                        idleCallback $= fmap ($ worldM) change
+                        let applyCallback f = f _window state
 
-                                        keyboardCallback $= (fmap ($ _window) $ callKey callbacks)
-                                        specialCallback  $= (fmap ($ _window) $ callSpecKey callbacks)
+                        reshapeCallback $= (fmap applyCallback $ callReshape callbacks)
+                        displayCallback $= sequence_ (display state worldM)
+                        idleCallback $= fmap ($ worldM) change
 
-                                        mainLoop
+                        keyboardCallback $= (fmap applyCallback $ callKey callbacks)
+                        specialCallback  $= (fmap applyCallback $ callSpecKey callbacks)
+
+                        mainLoop
 

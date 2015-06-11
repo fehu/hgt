@@ -5,7 +5,13 @@ import Tiles
 import TileRenderer
 import TestTiles as TT
 import TestTilesRenderer
+
 import Data.Map (fromList)
+import Data.IORef
+--import Data.StateVar
+--import Foreign.Storable
+--import Foreign
+--import GHC.ForeignPtr
 
 import Graphics.UI.GLUT hiding (Point)
 
@@ -55,10 +61,6 @@ reshaped size = do putStrLn $ "viewport"
                    viewport $= (mkPosition 0 0, mkSize 400 400) -- size
                    postRedisplay Nothing
 
-fixedCamera = Camera { topLeft      = Point 0 0
-                     , bottomRight  = Point 2 2
-                     }
-
 mkPosition :: Int -> Int -> Position
 mkPosition x y = Position (glInt x) (glInt y)
 
@@ -66,19 +68,50 @@ mkSize :: Int -> Int -> Size
 mkSize w h = Size (glInt w) (glInt h)
 
 
-keyCallbacks :: Maybe (Window -> KeyboardCallback)
-keyCallbacks = Just $ \w -> \key pos -> case key of '\ESC' -> do destroyWindow w
-                                                    _      -> return () --putStrLn $ "key " ++ show key
+keyCallbacks :: Maybe (Window -> IORef(Camera Int) -> KeyboardCallback)
+keyCallbacks = Just $ \w -> \cRef -> \key pos -> case key of '\ESC' -> do destroyWindow w
+                                                             _      -> return () --putStrLn $ "key " ++ show key
 
-keySpecialCallbacks :: Maybe (Window -> SpecialCallback)
-keySpecialCallbacks = Just $ \w -> \key pos -> case key of KeyUp    -> fail "up"
-                                                           KeyRight -> fail "right"
-                                                           KeyDown  -> fail "down"
-                                                           KeyLeft  -> fail "left"
-                                                           _        -> return ()
+keySpecialCallbacks :: Maybe (Window -> IORef(Camera Int) -> SpecialCallback)
+keySpecialCallbacks = Just $ \w -> \cRef -> \key pos -> case key of KeyUp    -> fail "up"
+                                                                    KeyRight -> fail "right"
+                                                                    KeyDown  -> fail "down"
+                                                                    KeyLeft  -> fail "left"
+                                                                    _        -> return ()
 
-render :: Renderer World
-render = renderMap before after fixedCamera
+initialCamera = Camera { topLeft      = Point 0 0
+                       , bottomRight  = Point 2 2
+                       }
+
+data Direction = Left | Right | Up | Down deriving Show
+
+moveCamera :: IORef (Camera Int) -> Direction -> IO()
+moveCamera cameraRef dir = do camera <- readIORef cameraRef
+                              putStrLn $ "dir = " ++ show dir
+                              let updCamera cam i f = error "todo" --Camera ()
+
+                              let nCamera = case dir of Main.Left  -> error ""
+--                              putStrLn $ "new camera = " ++ show nCamera
+                              writeIORef cameraRef nCamera
+
+
+-- from https://hackage.haskell.org/package/StateVar-1.0.0.0/docs/Data-StateVar.html
+--makeStateVarFromPtr :: Storable a => Ptr a -> StateVar a
+--makeStateVarFromPtr p = makeStateVar (peek p) (poke p)
+
+--cameraPtr =
+--cameraVar :: IO( StateVar (Camera Int) )
+--cameraVar = newIORef initialCamera
+--cameraVar = do p <- malloc :: IO (Ptr (Camera Int))
+--               let v = makeStateVarFromPtr p
+--               return v
+
+
+cameraVar :: IO( IORef (Camera Int) )
+cameraVar = newIORef initialCamera
+
+render :: IORef (Camera Int) -> Renderer World
+render cameraRef = do renderMap before after cameraRef
       where before = do clear [ColorBuffer]
                         loadIdentity
                         color $ rgb2GLcolor 255 255 255
@@ -91,4 +124,4 @@ callbacks = Callbacks{ callReshape = Nothing
                      }
 
 main :: IO()
-main = run render Nothing callbacks world
+main = run cameraVar render Nothing callbacks world

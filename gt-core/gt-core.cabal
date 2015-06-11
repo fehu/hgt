@@ -12,7 +12,6 @@ data-dir: ""
 library
     build-depends: base -any,
                    containers -any,
-                   transformers -any,
                    OpenGL -any,
                    GLUT -any
     exposed-modules: Tiles

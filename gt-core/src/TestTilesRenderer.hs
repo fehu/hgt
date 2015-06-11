@@ -97,7 +97,7 @@ renderTile vsize tileRef = [primitives, text]
               z  = glFloat 1
 
 
-renderMap :: IO() -> IO() -> Camera Int -> TestMapRenderer
+renderMap :: IO() -> IO() -> IORef(Camera Int) -> TestMapRenderer
 renderMap before after = mkMapRenderer before after beforeRender getVisibles renderTile
 
 
