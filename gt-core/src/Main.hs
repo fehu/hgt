@@ -73,10 +73,10 @@ keyCallbacks = Just $ \w -> \cRef -> \key pos -> case key of '\ESC' -> do destro
                                                              _      -> return () --putStrLn $ "key " ++ show key
 
 keySpecialCallbacks :: Maybe (Window -> IORef(Camera Int) -> SpecialCallback)
-keySpecialCallbacks = Just $ \w -> \cRef -> \key pos -> case key of KeyUp    -> fail "up"
-                                                                    KeyRight -> fail "right"
-                                                                    KeyDown  -> fail "down"
-                                                                    KeyLeft  -> fail "left"
+keySpecialCallbacks = Just $ \w -> \cRef -> \key pos -> case key of KeyUp    -> moveCamera cRef Main.Up
+                                                                    KeyRight -> moveCamera cRef Main.Right
+                                                                    KeyDown  -> moveCamera cRef Main.Down
+                                                                    KeyLeft  -> moveCamera cRef Main.Left
                                                                     _        -> return ()
 
 initialCamera = Camera { topLeft      = Point 0 0
@@ -88,9 +88,19 @@ data Direction = Left | Right | Up | Down deriving Show
 moveCamera :: IORef (Camera Int) -> Direction -> IO()
 moveCamera cameraRef dir = do camera <- readIORef cameraRef
                               putStrLn $ "dir = " ++ show dir
-                              let updCamera cam i f = error "todo" --Camera ()
+                              let updCamera fx fy = Camera ptT ptB
+                                                 where ffx g = fx . x . g $ camera
+                                                       ffy g = fy . y . g $ camera
+                                                       ptT = Point (ffx topLeft) (ffy topLeft)
+                                                       ptB = Point (ffx bottomRight) (ffy bottomRight)
+                              let id x = x
+                              let minus1 x = x - 1
+                              let plus1  x = x + 1
 
-                              let nCamera = case dir of Main.Left  -> error ""
+                              let nCamera = case dir of Main.Left  -> updCamera minus1 id
+                                                        Main.Right -> updCamera plus1  id
+                                                        Main.Up    -> updCamera id plus1
+                                                        Main.Down  -> updCamera id minus1
 --                              putStrLn $ "new camera = " ++ show nCamera
                               writeIORef cameraRef nCamera
 
