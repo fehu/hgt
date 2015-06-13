@@ -2,8 +2,8 @@ name: gt-core
 version: 0.0.0
 cabal-version: >=1.6
 build-type: Simple
-license: todo
-license-file: ""
+license: MIT
+license-file: "../licence"
 copyright: (c) Dmitry K
 stability: dev
 author: fehu
