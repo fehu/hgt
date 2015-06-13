@@ -44,34 +44,38 @@ tileColor tile = case tpe tile of Plain       -> (0, 255, 0)
                                   Mountain    -> (139, 69, 19)
                                   Sea         -> (0, 0, 255)
 
+scaleTranslate :: (Int, Int) -> (GLfloat, GLfloat) -> (GLfloat, GLfloat)
 scaleTranslate vsize xy = (sc * 2 * fst xy, sc * 2 * snd xy)
                        where sc = scaleRatio vsize
 
-translateShift camera tile = scaleTranslate camera (shift x, shift y)
-                   where shift q = c q - h (q . topLeft) - 1
+translateShift camera tile = scaleTranslate vsize (shift x, shift y)
+                   where vsize = cameraSize camera
+                         vsmax = max (fst vsize) (snd vsize)
+                         shift q = c q - h (q . topLeft)  - 0.5 * (int2GLfloat vsmax - 1) -- (vsmax - 1) * 0.5
+                          -- 4 => 1.5; 3 => 1
                          c s = int2GLfloat . s . Tiles.id $ tile
                          h s = int2GLfloat . s $ camera
 
-
-scaleRatio camera = 1 / int2GLfloat (max (fst vsize) (snd vsize))
-                 where vsize = cameraSize camera
+scaleRatio vsize = 1 / int2GLfloat (max (fst vsize) (snd vsize))
 
 prepareToDrawPrimitives camera tile = do loadIdentity
                                          let (cx, cy) = translateShift camera tile
                                          translate $ Vector3 cx cy 0
+                                         putStrLn $ "camera: " ++ show camera
                                          putStrLn $ "translate: " ++ show cx ++ ", " ++ show cy
-                                         let sc = scaleRatio camera
+                                         let sc = scaleRatio $ cameraSize camera
                                          putStrLn $ "scaleRatio = " ++ show sc
                                          scale sc sc (1 :: GLfloat)
 
 prepareToDrawText camera tile pos = do loadIdentity
                                        let (cx, cy) = translateShift camera tile
-                                       let spos = scaleTranslate camera pos
+                                       let vsize = cameraSize camera
+                                       let spos = scaleTranslate vsize pos
                                        let x = cx + (fst spos / 2)
                                        let y = cy + (snd spos / 2)
                                        translate $ Vector3 (x - 0) (y - 0) 0
                                        putStrLn $ "translate txt  : " ++ show x  ++ ", " ++ show y
-                                       let sc = 2e-3 * scaleRatio camera
+                                       let sc = 2e-3 * scaleRatio vsize
                                        scale sc sc (sc :: GLfloat)
 
 renderTile :: Camera Int -> TestTileRenderer

@@ -77,7 +77,7 @@ keySpecialCallbacks = Just $ \w -> \cRef -> \key pos -> case key of KeyUp    -> 
                                                                     _        -> return ()
 
 initialCamera = Camera { topLeft      = Point 0 0
-                       , bottomRight  = Point 2 2
+                       , bottomRight  = Point 5 5
                        }
 
 data Direction = Left | Right | Up | Down deriving Show
