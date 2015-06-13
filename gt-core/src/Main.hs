@@ -43,7 +43,7 @@ tls = [
       , Tile (Point 3 0) Sea       (Nothing,      Rain)    []
       , Tile (Point 3 1) Plain     (Just player1, Cloudy)  []
       , Tile (Point 4 0) Hill      (Just player2, Rain)    []
-      , Tile (Point 5 1) Mountain  (Nothing,      Sunny)   []
+      , Tile (Point 4 1) Mountain  (Nothing,      Sunny)   []
       ]
 
 neighbours :: Neighbours TileId
@@ -101,21 +101,8 @@ moveCamera cameraRef dir = do camera <- readIORef cameraRef
                                                         Main.Right -> updCamera plus1  id
                                                         Main.Up    -> updCamera id plus1
                                                         Main.Down  -> updCamera id minus1
---                              putStrLn $ "new camera = " ++ show nCamera
                               writeIORef cameraRef nCamera
-
-
--- from https://hackage.haskell.org/package/StateVar-1.0.0.0/docs/Data-StateVar.html
---makeStateVarFromPtr :: Storable a => Ptr a -> StateVar a
---makeStateVarFromPtr p = makeStateVar (peek p) (poke p)
-
---cameraPtr =
---cameraVar :: IO( StateVar (Camera Int) )
---cameraVar = newIORef initialCamera
---cameraVar = do p <- malloc :: IO (Ptr (Camera Int))
---               let v = makeStateVarFromPtr p
---               return v
-
+                              postRedisplay Nothing
 
 cameraVar :: IO( IORef (Camera Int) )
 cameraVar = newIORef initialCamera

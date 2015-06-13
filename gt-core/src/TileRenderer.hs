@@ -4,6 +4,8 @@ module TileRenderer (
 , MapRenderer, TileRenderer
 
 , mkMapRenderer
+, cameraSize
+
 , glFloat, int2GLfloat
 , glInt
 , rgb2GLcolor
@@ -37,27 +39,29 @@ data Camera a = Camera{
                 , bottomRight   :: Point  a
                 } deriving Show
 
-mkMapRenderer :: (Num a, Show a) =>
+cameraSize :: (Num a) =>  Camera a -> (a, a)
+cameraSize camera = (s x, s y)
+              where s q = (q . bottomRight $ camera) - (q . topLeft $ camera) + 1
+
+
+
+mkMapRenderer :: (Num a) =>
                    IO()
                 -> IO()
                 -> (Tile id tpe state content -> IO())
                 -> (Tiles id tpe state content -> Camera a -> [Tile id tpe state content])
-                -> ((a, a) -> TileRenderer id tpe state content)
+                -> (Camera a -> TileRenderer id tpe state content)
                 -> IORef(Camera a)
                 -> MapRenderer id tpe state content
 mkMapRenderer before after beforeRender visibles render cameraRef mapRef = [before, renderers, after]
             where renderers = do Tiles.Map theTiles _  <- readIORef mapRef
                                  camera <- readIORef cameraRef
                                  let toRender = visibles theTiles camera
-                                 putStrLn $ "camera = " ++ show camera
-                                 let s q = (q . bottomRight $ camera) - (q . topLeft $ camera) + 1
-                                 let size = (s x, s y)
                                  let rendSeq = forM toRender $ \t -> do
                                         tRef <- newIORef t
-                                        return $ beforeRender t : render size tRef
+                                        return $ beforeRender t : render camera tRef
                                  let rendSeq' = fmap transpose rendSeq
                                  ioLayers <- fmap (map sequence_) rendSeq'
---                                 let x = ioLayers :: [IO ()]
                                  sequence_ ioLayers
 
 
