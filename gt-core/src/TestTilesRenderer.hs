@@ -5,13 +5,11 @@ module TestTilesRenderer (
 , renderTile
 , renderMap
 
-, glFloat, int2GLfloat
-, glInt
-, rgb2GLcolor
 , tileQuad
 ) where
 
 import OpenGLRenderer
+import GLUtils
 import Tiles
 import TestTiles as TT
 import TileRenderer as TR
@@ -19,9 +17,6 @@ import TileRenderer as TR
 import Data.IORef
 import Data.Map
 import Data.Maybe (fromMaybe)
-
-import Control.Monad
-import GHC.Float.RealFracMethods
 
 import Graphics.UI.GLUT
 
@@ -54,8 +49,8 @@ scaleTranslate vsize xy = (sc * 2 * fst xy, sc * 2 * snd xy)
 
 translateShift camera tile = scaleTranslate camera (shift x, shift y)
                    where shift q = c q - h (q . topLeft) - 1
-                         c s = glFloat . int2Float . s . Tiles.id $ tile
-                         h s = glFloat . int2Float . s $ camera
+                         c s = int2GLfloat . s . Tiles.id $ tile
+                         h s = int2GLfloat . s $ camera
 
 
 scaleRatio camera = 1 / int2GLfloat (max (fst vsize) (snd vsize))

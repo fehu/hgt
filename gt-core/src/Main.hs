@@ -1,6 +1,7 @@
 module Main ( main ) where
 
 import OpenGLRenderer
+import GLUtils
 import Tiles
 import TileRenderer
 import TestTiles as TT
@@ -8,10 +9,6 @@ import TestTilesRenderer
 
 import Data.Map (fromList)
 import Data.IORef
---import Data.StateVar
---import Foreign.Storable
---import Foreign
---import GHC.ForeignPtr
 
 import Graphics.UI.GLUT hiding (Point)
 

@@ -10,6 +10,7 @@ module Tiles (
 ) where
 
 import Data.Map as DMap
+import Data.List (intercalate)
 
 
 data Tile  id tpe state content = Tile {
@@ -32,12 +33,12 @@ tile  :: (Ord id) => id -> Tiles.Map id tpe state content -> Maybe (Tile id tpe 
 tile id (Map ts ns) = DMap.lookup id ts
 
 instance (Show id, Show tpe, Show state, Show content) => Show (Tile id tpe state content) where
-    show (Tile id tpe state contents) = Prelude.foldr (\x acc -> x ++ " " ++ acc) ""
-                                            [show id, show tpe, show state, show contents]
-
-
-mkString :: (Show a) => String -> [a] -> String
-mkString sep = Prelude.foldr (\x acc -> show x ++ sep ++ acc) ""
+    show (Tile id tpe state contents) = "Tile(" ++ str ++ ")"
+                                     where str = intercalate " " [ show id
+                                                                 , show tpe
+                                                                 , show state
+                                                                 , show contents
+                                                                 ]
 
 
 mkTiles :: Ord id => [Tile id tpe state content] -> Tiles id tpe state content

@@ -1,9 +1,9 @@
 name: gt-core
-version: 0.0.0
+version: 0.0.1
 cabal-version: >=1.6
 build-type: Simple
 license: MIT
-license-file: "../licence"
+license-file: ../licence
 copyright: (c) Dmitry K
 stability: dev
 author: fehu
@@ -14,9 +14,7 @@ library
                    containers -any,
                    OpenGL -any,
                    GLUT -any
-    exposed-modules: Tiles
-                     OpenGLRenderer
-                     TileRenderer
+    exposed-modules: Tiles GLUtils OpenGLRenderer TileRenderer
     exposed: True
     buildable: True
     hs-source-dirs: src
