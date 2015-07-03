@@ -10,6 +10,7 @@ module TestTilesRenderer (
 
 import OpenGLRenderer
 import GLUtils
+import Utils
 import Tiles
 import TestTiles as TT
 import TileRenderer as TR
@@ -51,7 +52,7 @@ scaleTranslate vsize xy = (sc * 2 * fst xy, sc * 2 * snd xy)
 translateShift camera tile = scaleTranslate vsize (shift x, shift y)
                    where vsize = cameraSize camera
                          vsmax = max (fst vsize) (snd vsize)
-                         shift q = c q - h (q . topLeft)  - 0.5 * (int2GLfloat vsmax - 1) -- (vsmax - 1) * 0.5
+                         shift q = c q - h (q . topLeft)  - 0.5 * (int2GLfloat vsmax - 1)
                           -- 4 => 1.5; 3 => 1
                          c s = int2GLfloat . s . Tiles.id $ tile
                          h s = int2GLfloat . s $ camera

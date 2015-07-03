@@ -2,6 +2,7 @@ module Main ( main ) where
 
 import OpenGLRenderer
 import GLUtils
+import Utils
 import Tiles
 import TileRenderer
 import TestTiles as TT
@@ -76,16 +77,16 @@ keySpecialCallbacks = Just $ \w -> \cRef -> \key pos -> case key of KeyUp    -> 
                                                                     KeyLeft  -> moveCamera cRef Main.Left
                                                                     _        -> return ()
 
-initialCamera = Camera { topLeft      = Point 0 0
-                       , bottomRight  = Point 5 5
-                       }
+initialCamera = Rect { topLeft      = Point 0 0
+                     , bottomRight  = Point 5 5
+                     }
 
 data Direction = Left | Right | Up | Down deriving Show
 
 moveCamera :: IORef (Camera Int) -> Direction -> IO()
 moveCamera cameraRef dir = do camera <- readIORef cameraRef
                               putStrLn $ "dir = " ++ show dir
-                              let updCamera fx fy = Camera ptT ptB
+                              let updCamera fx fy = Rect ptT ptB
                                                  where ffx g = fx . x . g $ camera
                                                        ffy g = fy . y . g $ camera
                                                        ptT = Point (ffx topLeft) (ffy topLeft)

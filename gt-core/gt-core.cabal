@@ -14,7 +14,8 @@ library
                    containers -any,
                    OpenGL -any,
                    GLUT -any
-    exposed-modules: Tiles GLUtils OpenGLRenderer TileRenderer
+    exposed-modules: Tiles  TileRenderer
+                     Utils GLUtils OpenGLRenderer
     exposed: True
     buildable: True
     hs-source-dirs: src
@@ -25,5 +26,3 @@ executable gt-run
     main-is: Main.hs
     buildable: True
     hs-source-dirs: src
-
-

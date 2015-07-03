@@ -10,6 +10,7 @@ module TileRenderer (
 
 import OpenGLRenderer
 import Tiles
+import Utils
 
 import Data.IORef
 import Data.List
@@ -26,15 +27,7 @@ import Graphics.UI.GLUT (GLfloat, GLint, Color3(..), DisplayCallback)
 type MapRenderer  id tpe state content = Renderer (Tiles.Map id tpe state content)
 type TileRenderer id tpe state content = Renderer (Tile      id tpe state content)
 
-data Point a = Point {
-                x :: a
-              , y :: a
-              } deriving (Show, Eq, Ord)
-
-data Camera a = Camera{
-                  topLeft       :: Point a
-                , bottomRight   :: Point  a
-                } deriving Show
+type Camera a = Rect a
 
 cameraSize :: (Num a) =>  Camera a -> (a, a)
 cameraSize camera = (s x, s y)
