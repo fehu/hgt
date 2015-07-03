@@ -14,8 +14,11 @@ library
                    containers -any,
                    OpenGL -any,
                    GLUT -any
-    exposed-modules: Utils Utils.GL OpenGLRenderer
-                     Tiles Tiles.Renderer Tiles.Generation
+    exposed-modules: Utils Utils.GL OpenGLRenderer Tiles
+                     Tiles.Renderer Tiles.Generation
+                     Universe
     exposed: True
     buildable: True
     hs-source-dirs: src
+
+
