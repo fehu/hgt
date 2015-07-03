@@ -1,2 +1,2 @@
-# Haskell Tile Game
+# Haskell Games (Test)
 _( Learning OpenGL and Haskell )_
