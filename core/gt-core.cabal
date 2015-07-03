@@ -16,7 +16,8 @@ library
                    GLUT -any
     exposed-modules: Utils Utils.GL OpenGLRenderer Tiles
                      Tiles.Renderer Tiles.Generation
-                     Universe
+                     Measures, Measures.SI
+                     Universe, Universe.PhysicalLaws, Universe.Objects
     exposed: True
     buildable: True
     hs-source-dirs: src
