@@ -14,7 +14,7 @@ library
                    containers -any,
                    OpenGL -any,
                    GLUT -any
-    exposed-modules: Tiles  TileRenderer
+    exposed-modules: Tiles  TileRenderer TilesGeneration
                      Utils GLUtils OpenGLRenderer
     exposed: True
     buildable: True
