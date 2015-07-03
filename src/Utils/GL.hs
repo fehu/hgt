@@ -1,4 +1,4 @@
-module GLUtils (
+module Utils.GL(
   glFloat
 , int2GLfloat
 , glInt

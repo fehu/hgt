@@ -1,12 +1,12 @@
 module Main ( main ) where
 
 import OpenGLRenderer
-import GLUtils
 import Utils
+import Utils.GL
 import Tiles
-import TileRenderer
-import TestTiles as TT
-import TestTilesRenderer
+import Tiles.Renderer
+import Tiles.Test.Tiles as TT
+import Tiles.Test.Renderer
 
 import Data.Map (fromList)
 import Data.IORef

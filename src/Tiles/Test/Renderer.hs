@@ -1,4 +1,4 @@
-module TestTilesRenderer (
+module Tiles.Test.Renderer (
   TestTileRenderer
 , TestMapRenderer
 
@@ -9,11 +9,11 @@ module TestTilesRenderer (
 ) where
 
 import OpenGLRenderer
-import GLUtils
 import Utils
+import Utils.GL
 import Tiles
-import TestTiles as TT
-import TileRenderer as TR
+import Tiles.Test.Tiles as TT
+import Tiles.Renderer   as TR
 
 import Data.IORef
 import Data.Map

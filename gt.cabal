@@ -3,7 +3,7 @@ version: 0.0.1
 cabal-version: >=1.6
 build-type: Simple
 license: MIT
-license-file: ../licence
+license-file: licence
 copyright: (c) Dmitry K
 stability: dev
 author: fehu
@@ -14,15 +14,15 @@ library
                    containers -any,
                    OpenGL -any,
                    GLUT -any
-    exposed-modules: Tiles  TileRenderer TilesGeneration
-                     Utils GLUtils OpenGLRenderer
+    exposed-modules: Utils Utils.GL OpenGLRenderer
+                     Tiles Tiles.Renderer Tiles.Generation
     exposed: True
     buildable: True
     hs-source-dirs: src
-    other-modules: TestTiles TestTilesRenderer
+    other-modules: Tiles.Test.Tiles Tiles.Test.Renderer
 
-executable gt-run
+executable test-tile
     build-depends: base -any
-    main-is: Main.hs
+    main-is: Tiles/Test/Main.hs
     buildable: True
     hs-source-dirs: src

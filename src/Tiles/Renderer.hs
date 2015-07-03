@@ -1,4 +1,4 @@
-module TileRenderer (
+module Tiles.Renderer (
   Point(..)
 , Camera(..)
 , MapRenderer, TileRenderer

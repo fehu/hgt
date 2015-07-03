@@ -1,9 +1,9 @@
-module TestTiles (
+module Tiles.Test.Tiles (
 
 
-  TestTiles.Tile
-, TestTiles.Tiles
-, TestTiles.Map
+  Tiles.Test.Tiles.Tile
+, Tiles.Test.Tiles.Tiles
+, Tiles.Test.Tiles.Map
 
 , TileId
 , TileType(..)
@@ -17,7 +17,7 @@ module TestTiles (
 ) where
 
 import Tiles
-import TileRenderer (Point)
+import Tiles.Renderer (Point)
 
 type Coordinate = Point Int
 
