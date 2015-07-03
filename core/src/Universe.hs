@@ -8,8 +8,6 @@ module Universe (
 
 , GravityField
 
-, AnyObject
-
 ) where
 
 import Measures
@@ -32,7 +30,7 @@ data ObjectPoint id d = ObjectPoint (MeasuredVal d Mass)
                                     (MeasuredVal (Vector3 d) (D' Distance))
 
 
-instance AnyObject d (ObjectPoint id d) Int where
+instance Any d (ObjectPoint id d) Int where
     restMass         (ObjectPoint mass _ _ _) = mass
     coordinates cSys (ObjectPoint _ id pos _) = pos -- todo !! relativeTo
     speed cSys       (ObjectPoint _ id _ v)   = v   -- todo !! relativeTo

@@ -14,10 +14,19 @@ library
                    containers -any,
                    OpenGL -any,
                    GLUT -any
-    exposed-modules: Utils Utils.GL OpenGLRenderer Tiles
-                     Tiles.Renderer Tiles.Generation
-                     Measures, Measures.SI
-                     Universe, Universe.PhysicalLaws, Universe.Objects
+    exposed-modules: OpenGLRenderer
+                     Utils
+                        Utils.GL
+                     Tiles
+                        Tiles.Renderer
+                        Tiles.Generation
+                     Measures
+                        Measures.SI
+                     Universe
+                        Universe.PhysicalLaws
+                        Universe.Objects
+                            Universe.Objects.Shape
+                            Universe.Objects.Chemistry
     exposed: True
     buildable: True
     hs-source-dirs: src

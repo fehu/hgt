@@ -15,6 +15,8 @@ module Measures (
 , Temperature
 , Energy
 
+, Force
+
 , Mult
 , Div
 , Pow2
@@ -30,6 +32,7 @@ class Measure m where
     measureName   :: m -> String
     measureSystem :: m -> MeasureSystem
 
+--- -- Atomic Measures -- ---
 data Time        = Time
 data Distance    = Distance
 data Mass        = Mass
@@ -37,13 +40,17 @@ data Luminosity  = Luminosity
 data Temperature = Temperature
 data Energy      = Energy
 
-
+--- -- Measures Composition -- ---
 data Mult a b = Mult a b
 data Div  a b = Div  a b
 data Pow2 a   = Pow  a
 
 type D'  a = Div a Time
 type D'' a = Div a (Pow2 Time)
+
+
+--- -- Composite Measures -- ---
+type Force = D'' (Mult Mass Distance)
 
 
 
