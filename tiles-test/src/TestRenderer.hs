@@ -1,4 +1,4 @@
-module Tiles.Test.Renderer (
+module TestRenderer (
   TestTileRenderer
 , TestMapRenderer
 
@@ -12,8 +12,8 @@ import OpenGLRenderer
 import Utils
 import Utils.GL
 import Tiles
-import Tiles.Test.Tiles as TT
-import Tiles.Renderer   as TR
+import TestTiles as TT
+import Tiles.Renderer as TR
 
 import Data.IORef
 import Data.Map

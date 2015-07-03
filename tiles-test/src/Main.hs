@@ -5,8 +5,8 @@ import Utils
 import Utils.GL
 import Tiles
 import Tiles.Renderer
-import Tiles.Test.Tiles as TT
-import Tiles.Test.Renderer
+import TestTiles as TT
+import TestRenderer
 
 import Data.Map (fromList)
 import Data.IORef

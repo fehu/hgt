@@ -1,9 +1,9 @@
-name: gt-core
+name: gt-tiles-test
 version: 0.0.1
 cabal-version: >=1.6
 build-type: Simple
 license: MIT
-license-file: licence
+license-file: ../licence
 copyright: (c) Dmitry K
 stability: dev
 author: fehu
@@ -13,16 +13,15 @@ library
     build-depends: base -any,
                    containers -any,
                    OpenGL -any,
-                   GLUT -any
-    exposed-modules: Utils Utils.GL OpenGLRenderer
-                     Tiles Tiles.Renderer Tiles.Generation
+                   GLUT -any,
+                   gt-core -any
+    exposed-modules: TestTiles TestRenderer
     exposed: True
     buildable: True
     hs-source-dirs: src
-    other-modules: Tiles.Test.Tiles Tiles.Test.Renderer
 
 executable test-tile
     build-depends: base -any
-    main-is: Tiles/Test/Main.hs
+    main-is: Main.hs
     buildable: True
     hs-source-dirs: src

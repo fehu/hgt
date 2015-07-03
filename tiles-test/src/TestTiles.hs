@@ -1,9 +1,9 @@
-module Tiles.Test.Tiles (
+module TestTiles (
 
 
-  Tiles.Test.Tiles.Tile
-, Tiles.Test.Tiles.Tiles
-, Tiles.Test.Tiles.Map
+  TestTiles.Tile
+, TestTiles.Tiles
+, TestTiles.Map
 
 , TileId
 , TileType(..)
