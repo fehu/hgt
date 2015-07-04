@@ -27,6 +27,7 @@ library
                         Universe.Objects
                             Universe.Objects.Shape
                             Universe.Objects.Chemistry
+                            Universe.Objects.Stellar
     exposed: True
     buildable: True
     hs-source-dirs: src

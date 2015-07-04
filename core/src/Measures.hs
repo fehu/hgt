@@ -14,12 +14,13 @@ module Measures (
 , Luminosity
 , Temperature
 , Energy
+, Angle
 
 , Force
 
 , Mult
 , Div
-, Pow2
+, Pow2, Pow3
 , D', D''
 
 ) where
@@ -39,11 +40,13 @@ data Mass        = Mass
 data Luminosity  = Luminosity
 data Temperature = Temperature
 data Energy      = Energy
+data Angle       = Angle
 
 --- -- Measures Composition -- ---
 data Mult a b = Mult a b
 data Div  a b = Div  a b
-data Pow2 a   = Pow  a
+data Pow2 a   = Pow2 a
+data Pow3 a   = Pow3 a
 
 type D'  a = Div a Time
 type D'' a = Div a (Pow2 Time)
