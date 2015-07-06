@@ -56,8 +56,6 @@ type D'' a = Div a (Pow2 Time)
 type Force = D'' (Mult Mass Distance)
 
 
-
-
 class (Measure m) => Measured a d m where
     measuredValue :: a -> d
     measure       :: a -> m

@@ -21,21 +21,19 @@ module Universe.Objects (
 ) where
 
 import Data.Map
-import Graphics.Rendering.OpenGL.GL.Tensor (Vector3)
+import Graphics.Rendering.OpenGL.GL.Tensor(Vector3)
 
 import Measures
 import Universe.Phys
 import Universe.Objects.Shape
 import Universe.Objects.Chemistry
-import Universe.Objects.Stellar
-
-
-type VectorMeasure d m = MeasuredVal (Vector3 d) m
 
 type TODO = Int
 
 data LuminositySource d = LightReflection { albedo :: d }
                         | LightGeneration { luminosity :: MeasuredVal d Luminosity }
+
+
                            -- --- --- -- --- --- --
    --- --- --- --- --- --- --- --- --- -- --- --- --- --- --- --- --- --- ---
 -- --- --- --- --- --- --- --- --- Properties --- --- --- --- --- --- --- --- --
@@ -63,7 +61,7 @@ class (Any d obj coordSys) =>
 
 
 class (Any d obj coordSys) =>
-    HasTrajectory d obj coordSys    where trajectoryOf  :: obj -> Trajectory d
+    HasTrajectory d obj coordSys    where trajectoryOf  :: obj -> timeLapse -> Position d relativeTo
 
 
 class (Any d obj coordSys) =>
@@ -85,13 +83,12 @@ class (Any d obj coordSys) =>
    --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
                             -- --- --- -- --- --- --
 
-class StellarSystem id d obj where
+class StellarSystem id d obj body where
     systemId :: obj -> id
-    stars    :: obj -> [Star]
-    bodies   :: obj -> [TODO]
+    bodies   :: obj -> [body]
 
 
-class (Physical d obj coordSys, OpticallySeen d obj coordSys, HasTrajectory d obj coordSys) =>
+class (Physical d obj coordSys, OpticallySeen d obj coordSys) =>
     CelestialBody obj coordSys id d where
         bodyId :: obj -> id
         rotationAxis  :: coordSys -> obj -> Maybe (Vector3 d)

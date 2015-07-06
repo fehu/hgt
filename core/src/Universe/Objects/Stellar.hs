@@ -2,7 +2,9 @@
 
 module Universe.Objects.Stellar (
 
-  Star(..)
+  CelestialBody(..)
+
+, Star(..)
 , StarSpectrumClass(..)
 , StarLifeStage(..)
 
@@ -31,18 +33,15 @@ class (CelestialBody obj coordSys id d) =>
     Star obj coordSys id d where spectrumClass :: obj -> StarSpectrumClass
                                  starLifeStage :: obj -> StarLifeStage
 
-class (CelestialBody obj coordSys id d)     => NonStar  obj coordSys id d
 
-
-
-class (NonStar obj coordSys id d)           => Planet   obj coordSys id d
+class (CelestialBody obj coordSys id d)           => Planet   obj coordSys id d
     where planetClass :: obj -> PlanetClass
 
 
-class (NonStar obj coordSys id d)           => Comet    obj coordSys id d
+class (CelestialBody obj coordSys id d)           => Comet    obj coordSys id d
 
 
-class (NonStar obj coordSys id d)           => Asteroid obj coordSys id d
+class (CelestialBody obj coordSys id d)           => Asteroid obj coordSys id d
 
 
 
