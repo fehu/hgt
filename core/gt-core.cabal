@@ -28,6 +28,8 @@ library
                             Universe.Objects.Shape
                             Universe.Objects.Chemistry
                             Universe.Objects.Stellar
+                        Universe.Camera
+                        Universe.Scope
     exposed: True
     buildable: True
     hs-source-dirs: src
