@@ -4,7 +4,7 @@ module Universe (
 
   Universe(..)
 
-, Measure, Measured, MeasureConversion
+, Measure, Measured --, MeasureConversion
 
 , GravityField
 
@@ -13,6 +13,7 @@ module Universe (
 import Measures
 import Universe.PhysicalLaws
 import Universe.Objects
+import Universe.Phys
 
 import Graphics.Rendering.OpenGL.GL.Tensor (Vector3)
 

@@ -2,7 +2,7 @@
 
 module Universe.Objects (
 
-  VectorMeasure
+  VectorMeasured
 
 , LuminositySource(..)
 
@@ -42,8 +42,8 @@ data LuminositySource d = LightReflection { albedo :: d }
 
 class Any d obj coordSys where
     restMass    :: obj -> MeasuredVal d Mass
-    coordinates :: coordSys -> obj -> VectorMeasure d Distance
-    speed       :: coordSys -> obj -> MeasuredVal (Vector3 d) (D' Distance)
+    coordinates :: coordSys -> obj -> VectorMeasured d Distance
+    speed       :: coordSys -> obj -> VectorMeasured d (D' Distance) --MeasuredVal (Vector3 d) (D' Distance)
 
 
 class (Any d obj coordSys) =>
@@ -69,7 +69,7 @@ class (Any d obj coordSys) =>
 
 
 class (Any d obj coordSys) =>
-    HasPropulsion d obj coordSys    where force         :: obj -> VectorMeasure d Force
+    HasPropulsion d obj coordSys    where force         :: obj -> VectorMeasured d Force
 
 
 class (Any d obj coordSys) =>

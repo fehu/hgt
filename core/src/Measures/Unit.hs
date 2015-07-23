@@ -24,6 +24,7 @@ module Measures.Unit (
 , Distance(..)
 , Mass(..)
 , Temperature(..)
+, Luminosity(..)
 , Angle(..)
 
 -- Composite Units
@@ -82,6 +83,7 @@ data Time        = Time         deriving (Show, Typeable)
 data Distance    = Distance     deriving (Show, Typeable)
 data Mass        = Mass         deriving (Show, Typeable)
 data Temperature = Temperature  deriving (Show, Typeable)
+data Luminosity  = Luminosity   deriving (Show, Typeable)
 data Angle       = Angle        deriving (Show, Typeable)
 
 
@@ -89,6 +91,7 @@ instance AtomicUnit Time
 instance AtomicUnit Distance
 instance AtomicUnit Mass
 instance AtomicUnit Temperature
+instance AtomicUnit Luminosity
 instance AtomicUnit Angle
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --

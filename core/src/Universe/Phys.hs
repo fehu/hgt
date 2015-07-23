@@ -1,8 +1,15 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE MultiParamTypeClasses
+           , ExistentialQuantification
+           , FlexibleContexts
+           , FlexibleInstances
+           , Rank2Types
+--           , ConstraintKinds
+           #-}
+
 module Universe.Phys (
 
-  VectorMeasure
-, Angle3D
+  VectorMeasured(..)
+, Angle3D(..)
 
 , Position(..)
 , Pose(..)
@@ -17,14 +24,23 @@ import Measures
 
 
 
-type VectorMeasure d m = Measured (Vector3 d) m
+--data MeasuredVal d m = forall a . Measured a d m => MeasuredVal a
+--data VectorMeasured d m = forall a . Measured a (Vector3 d) m => VectorMeasured a
+--data Angle3D d = forall a . Measured a (Vector2 d) Angle => Angle3D a
 
-type Angle3D d = Measured (Vector2 d) Angle
+type VectorMeasured d m = MeasuredVal (Vector3 d) m
+
+type Angle3D d = MeasuredVal (Vector2 d) Angle
 
 
+--instance (Measure m) => Measured (MeasuredVal d m) d m where
+--    measured measure value =MeasuredVal value measure
+--    measuredValue
 
 
-data Position d relativeTo = Position { coordsVector     :: VectorMeasure d Distance
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+data Position d relativeTo = Position { coordsVector     :: VectorMeasured d Distance
                                       , coordsRelativeTo :: relativeTo
                                       }
 
