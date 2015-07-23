@@ -2,7 +2,7 @@
 
 module Universe (
 
-  Universe
+  Universe(..)
 
 , Measure, Measured, MeasureConversion
 
@@ -16,9 +16,10 @@ import Universe.Objects
 
 import Graphics.Rendering.OpenGL.GL.Tensor (Vector3)
 
-data Universe obj = Universe{ uObjects  :: [obj] }
+--data Universe obj = Universe{ uObjects  :: [obj] }
 
-
+class Universe u where
+    uObjects :: u -> [obj]
 
 
 
