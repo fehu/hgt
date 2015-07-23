@@ -17,9 +17,9 @@ import Measures
 
 
 
-type VectorMeasure d m = MeasuredVal (Vector3 d) m
+type VectorMeasure d m = Measured (Vector3 d) m
 
-type Angle3D d = MeasuredVal (Vector2 d) Angle
+type Angle3D d = Measured (Vector2 d) Angle
 
 
 

@@ -1,6 +1,6 @@
 name: gt-core
 version: 0.0.1
-cabal-version: >=1.6
+cabal-version: >= 1.6
 build-type: Simple
 license: MIT
 license-file: ../licence
@@ -21,6 +21,9 @@ library
                         Tiles.Renderer
                         Tiles.Generation
                      Measures
+                        Measures.Unit
+                            Measures.Unit.Internal
+                        Measures.IntType
                         Measures.SI
                      Universe
                         Universe.PhysicalLaws

@@ -2,11 +2,14 @@ module Utils (
   Point(..)
 , Rect(..)
 
-, on
-
 , HasZero(zero)
 
+, scalaGroupBy
+
 ) where
+
+import Data.Function (on)
+import Data.List     (groupBy, sortBy)
 
 data Point a = Point {
                 x :: a
@@ -18,11 +21,9 @@ data Rect a = Rect { topLeft       :: Point a
                    } deriving (Show, Eq)
 
 
--- from http://anton-k.github.io/ru-haskell-book/book/5.html
-on :: (b -> b -> c) -> (a -> b) -> a -> a -> c
-(.*.) `on` f = \x y -> f x .*. f y
-
-
 -- `algebra` package breaks some dpendencies, so ...
 class (Num a) => HasZero a where
     zero :: a
+
+scalaGroupBy :: (Ord b) => (a -> b) -> [a] -> [[a]]
+scalaGroupBy f = groupBy ((==) `on` f) . sortBy (compare `on` f)
