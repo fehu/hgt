@@ -31,16 +31,34 @@ type CalculatedInterraction d timeLapse = timeLapse -> ObjectEffects d
 
 type Interraction d timeLapse obj = obj -> obj -> CalculatedInterraction d timeLapse
 
-instance (Num d) => Num (CalculatedInterraction d timeLapse)
-    where a + b = \t -> a t + b t
+fun2 op a b t = a t `op` b t
+
+instance (Num d) => Num (CalculatedInterraction d timeLapse) where
+    (+) = fun2 (+)
+    (*) = fun2 (*)
+    (-) = fun2 (-)
+    abs = (.) abs
+    signum = (.) signum
+    fromInteger = const . fromInteger -- ??
+-- from http://anton-k.github.io/ru-haskell-book/book/5.html#функциональный-калькулятор
 
 
 type ObjectEffects d = ( MeasuredVal d (D'  Distance) -- for impulse
                        , MeasuredVal d (D'' Distance) -- for force
                        )
 
-instance (Num d) => Num (ObjectEffects d)
-    where (a', a'') + (b', b'') = (a' + b', a'' + b'')
+fun1p f f' (a, a') = (f a, f' a')
+fun2p op op' (a', a'') (b', b'') = (a' `op` b', a'' `op'` b'')
+
+instance (Num d) => Num (ObjectEffects d) where
+    (+) = fun2p (+) (+)
+    (*) = fun2p (*) (*)
+    (-) = fun2p (-) (-)
+    abs = fun1p abs abs
+    signum = fun1p signum signum
+    negate = fun1p negate negate
+    fromInteger x = (MeasuredVal (fromInteger x) (d'  Distance), MeasuredVal (fromInteger x) (d''  Distance)) -- ??
+
 
 --zeroEffectCInteraction :: (HasZero d) => CalculatedInterraction d timeLapse
 zeroEffectCInteraction _ = (MeasuredVal zero $ d' Distance, MeasuredVal zero $ d'' Distance)
