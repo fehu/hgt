@@ -27,8 +27,6 @@ data StarLifeStage     = TODO' -- TODO
 
 data PlanetClass = Todo -- TODO
 
-
-
 class (CelestialBody obj coordSys id d) =>
     Star obj coordSys id d where spectrumClass :: obj -> StarSpectrumClass
                                  starLifeStage :: obj -> StarLifeStage

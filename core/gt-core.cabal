@@ -26,6 +26,7 @@ library
                         Measures.IntType
                         Measures.SI
                      Universe
+                        Universe.Phys
                         Universe.PhysicalLaws
                         Universe.Objects
                             Universe.Objects.Shape

@@ -40,40 +40,40 @@ data LuminositySource d = LightReflection { albedo :: d }
    --- --- --- --- --- --- --- --- --- -- --- --- --- --- --- --- --- --- ---
                             -- --- --- -- --- --- --
 
-class Any d obj coordSys where
+class Any obj d coordSys where
     restMass    :: obj -> MeasuredVal d Mass
     coordinates :: coordSys -> obj -> VectorMeasured d Distance
     speed       :: coordSys -> obj -> VectorMeasured d (D' Distance) --MeasuredVal (Vector3 d) (D' Distance)
 
 
-class (Any d obj coordSys) =>
-    OpticallySeen d obj coordSys where
+class (Any obj d coordSys) =>
+    OpticallySeen obj d coordSys where
         brightness    :: coordSys -> obj -> Maybe (MeasuredVal d Luminosity)
         lightSource   ::             obj -> LuminositySource d
 
 
-class (Any d obj coordSys) =>
-    Physical d obj coordSys         where shape         :: obj -> Shape d
+class (Any obj d coordSys) =>
+    Physical obj d coordSys         where shape         :: obj -> Shape d
 
 
-class (Any d obj coordSys) =>
-    CompositionKnown d obj coordSys where composedOf    :: obj -> Composition d
+class (Any obj d coordSys) =>
+    CompositionKnown obj d coordSys where composedOf    :: obj -> Composition d
 
 
-class (Any d obj coordSys) =>
-    HasTrajectory d obj coordSys    where trajectoryOf  :: obj -> timeLapse -> Position d relativeTo
+class (Any obj d coordSys) =>
+    HasTrajectory obj d coordSys    where trajectoryOf  :: obj -> timeLapse -> Position d relativeTo
 
 
-class (Any d obj coordSys) =>
-    HasOrbit d obj coordSys         where orbitOf       :: obj -> Orbit d
+class (Any obj d coordSys) =>
+    HasOrbit obj d coordSys         where orbitOf       :: obj -> Orbit d
 
 
-class (Any d obj coordSys) =>
-    HasPropulsion d obj coordSys    where force         :: obj -> VectorMeasured d Force
+class (Any obj d coordSys) =>
+    HasPropulsion obj d coordSys    where force         :: obj -> VectorMeasured d Force
 
 
-class (Any d obj coordSys) =>
-    WarpCapable d obj coordSys      where               -- TODO
+class (Any obj d coordSys) =>
+    WarpCapable obj d coordSys      where               -- TODO
 
 
 
@@ -83,20 +83,20 @@ class (Any d obj coordSys) =>
    --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
                             -- --- --- -- --- --- --
 
-class StellarSystem id d obj body where
+class StellarSystem obj d id body where
     systemId :: obj -> id
     bodies   :: obj -> [body]
 
 
-class (Physical d obj coordSys, OpticallySeen d obj coordSys) =>
-    CelestialBody obj coordSys id d where
+class (Physical obj d coordSys, OpticallySeen obj d coordSys) =>
+    CelestialBody obj d coordSys id where
         bodyId :: obj -> id
         rotationAxis  :: coordSys -> obj -> Maybe (Vector3 d)
         rotationSpeed :: coordSys -> obj -> Maybe (MeasuredVal d (D' Angle))
 
 
-class (Physical d obj coordSys, OpticallySeen d obj coordSys) =>
-    Artificial obj coordSys id d where
+class (Physical obj d coordSys, OpticallySeen obj d coordSys) =>
+    Artificial obj d coordSys id where
         objectId :: obj -> id
         owner    :: obj -> TODO
 

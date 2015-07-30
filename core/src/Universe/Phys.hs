@@ -3,7 +3,6 @@
            , FlexibleContexts
            , FlexibleInstances
            , Rank2Types
---           , ConstraintKinds
            #-}
 
 module Universe.Phys (

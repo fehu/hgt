@@ -32,12 +32,12 @@ run stateIO display change callbacks world = do
 
                         let applyCallback f = f _window state
 
-                        reshapeCallback $= (fmap applyCallback $ callReshape callbacks)
+                        reshapeCallback $= fmap applyCallback (callReshape callbacks)
                         displayCallback $= sequence_ (display state worldM)
                         idleCallback $= fmap ($ worldM) change
 
-                        keyboardCallback $= (fmap applyCallback $ callKey callbacks)
-                        specialCallback  $= (fmap applyCallback $ callSpecKey callbacks)
+                        keyboardCallback $= fmap applyCallback (callKey callbacks)
+                        specialCallback  $= fmap applyCallback (callSpecKey callbacks)
 
                         mainLoop
 
