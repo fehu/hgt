@@ -1,6 +1,9 @@
 module Universe.Objects.Shape (
-    Shape
+    Shape(..)
 ) where
 
-data Shape d = TODO -- TODO --
+import Measures
+
+data Shape d = Spherical (MeasuredVal d Distance)
+             | ShapeTODO -- TODO
 
