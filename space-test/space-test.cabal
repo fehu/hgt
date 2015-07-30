@@ -1,0 +1,27 @@
+name: space-test
+version: 0.0.1
+cabal-version: >=1.6
+build-type: Simple
+license: MIT
+license-file: ../licence
+copyright: (c) Dmitry K
+stability: dev
+author: fehu
+data-dir: ""
+
+library
+    build-depends: base -any,
+                   containers -any,
+                   OpenGL -any,
+                   GLUT -any,
+                   gt-core -any
+    exposed-modules: CelestialObjects
+    exposed: True
+    buildable: True
+    hs-source-dirs: src
+
+executable space-test
+    build-depends: base -any
+    main-is: Main.hs
+    buildable: True
+    hs-source-dirs: src
