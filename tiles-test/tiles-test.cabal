@@ -1,4 +1,4 @@
-name: gt-tiles-test
+name: tiles-test
 version: 0.0.1
 cabal-version: >=1.6
 build-type: Simple
@@ -14,7 +14,8 @@ library
                    containers -any,
                    OpenGL -any,
                    GLUT -any,
-                   gt-core -any
+                   core         == 0.0.1,
+                   core-tiles   == 0.0.1
     exposed-modules: TestTiles TestRenderer
     exposed: True
     buildable: True

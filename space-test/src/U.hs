@@ -189,7 +189,7 @@ _G = MeasuredVal zero Distance:^I3 :/ (Time:^I2 :* Mass)
 
 gravityEffect :: (HasZero d) => Effect a d
 gravityEffect x y = interaction force (zero, zero)
-                 where forceAbs = measuredValue _G * measuredValue (mass x * mass y) / measuredValue (distance x y) ^ 2
+                 where -- forceAbs = measuredValue _G * measuredValue (mass x * mass y) / measuredValue (distance x y) ^ 2
                        force = undefined
 
 

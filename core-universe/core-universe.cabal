@@ -1,4 +1,4 @@
-name: gt-core
+name: core-universe
 version: 0.0.1
 cabal-version: >= 1.6
 build-type: Simple
@@ -9,18 +9,15 @@ stability: dev
 author: fehu
 data-dir: ""
 
+-- experimental
+
 library
     build-depends: base -any,
                    containers -any,
                    OpenGL -any,
-                   GLUT -any
-    exposed-modules: OpenGLRenderer
-                     Utils
-                        Utils.GL
-                     Tiles
-                        Tiles.Renderer
-                        Tiles.Generation
-                     Measures
+                   GLUT -any,
+                   core == 0.0.1
+    exposed-modules: Measures
                         Measures.Unit
                             Measures.Unit.Internal
                         Measures.IntType
