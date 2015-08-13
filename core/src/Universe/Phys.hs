@@ -48,3 +48,7 @@ data Pose d relativeTo = Pose { posePosition :: Position d relativeTo
                               }
 
 data Orbit d = TODO -- TODO
+
+
+data Interaction d = Force   (VectorMeasured d Measures.Force)
+                   | Impulse (VectorMeasured d Measures.Speed)

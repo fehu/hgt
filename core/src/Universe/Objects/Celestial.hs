@@ -1,6 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
-module Universe.Objects.Stellar (
+module Universe.Objects.Celestial (
 
   CelestialBody(..)
 
@@ -32,14 +32,14 @@ class (CelestialBody obj coordSys id d) =>
                                  starLifeStage :: obj -> StarLifeStage
 
 
-class (CelestialBody obj coordSys id d)           => Planet   obj coordSys id d
+class (CelestialBody obj d coordSys id)           => Planet   obj d coordSys id
     where planetClass :: obj -> PlanetClass
 
 
-class (CelestialBody obj coordSys id d)           => Comet    obj coordSys id d
+class (CelestialBody obj d coordSys id)           => Comet    obj d coordSys id
 
 
-class (CelestialBody obj coordSys id d)           => Asteroid obj coordSys id d
+class (CelestialBody obj d coordSys id)           => Asteroid obj d coordSys id
 
 
 

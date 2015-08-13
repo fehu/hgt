@@ -31,7 +31,7 @@ library
                         Universe.Objects
                             Universe.Objects.Shape
                             Universe.Objects.Chemistry
-                            Universe.Objects.Stellar
+                            Universe.Objects.Celestial
                         Universe.Camera
                         Universe.Scope
     exposed: True
