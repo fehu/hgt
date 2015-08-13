@@ -63,7 +63,7 @@ instance (Num d) => Num (ObjectEffects d) where
 --zeroEffectCInteraction :: (HasZero d) => CalculatedInterraction d timeLapse
 zeroEffectCInteraction _ = (MeasuredVal zero $ d' Distance, MeasuredVal zero $ d'' Distance)
 
-class (HasZero d) => Scope d scope where
+class (Num d, HasZero d) => Scope d scope where
     objectsInScope :: scope -> [obj]
     objectsInterractions :: [Interraction d timeLapse obj] -> Interraction d timeLapse obj
 

@@ -1,13 +1,13 @@
 Version of workspace file format:
                2
 Time of storage:
-               "Thu Jul 30 00:31:07 CDT 2015"
+               "Mon Aug 10 01:31:12 CDT 2015"
 Name of the workspace:
                "gt.ws"
 File paths of contained packages:
                ["space-test/space-test.cabal","core/gt-core.cabal","tiles-test/gt-tiles-test.cabal"]
 Maybe file path of an active package:
-               Just "core/gt-core.cabal"
+               Just "space-test/space-test.cabal"
 Maybe name of an active executable:
                Nothing
 Version Control System configurations for packages:

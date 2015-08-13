@@ -85,6 +85,11 @@ instance UnitDecompositionEvidence Force UComposite
 instance CompositeUnit             Force where
     unitDecompositionC _ = unitDecomposition $ Mass :* Acceleration
 
+instance UnitDecompositionEvidence Impulse UComposite
+instance CompositeUnit             Impulse where
+    unitDecompositionC _ = unitDecomposition $ Mass :* Acceleration
+
+
 instance UnitDecompositionEvidence Energy UComposite
 instance CompositeUnit             Energy where
     unitDecompositionC _ = unitDecomposition $ Distance :* Force

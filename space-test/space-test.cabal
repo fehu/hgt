@@ -10,12 +10,14 @@ author: fehu
 data-dir: ""
 
 library
-    build-depends: base -any,
-                   containers -any,
-                   OpenGL -any,
-                   GLUT -any,
-                   gt-core -any
+    build-depends: base         -any,
+                   containers   -any,
+                   OpenGL       -any,
+                   GLUT         -any,
+                   gt-core      -any,
+                   uuid         -any
     exposed-modules: CelestialObjects
+                     U
     exposed: True
     buildable: True
     hs-source-dirs: src
@@ -25,3 +27,5 @@ executable space-test
     main-is: Main.hs
     buildable: True
     hs-source-dirs: src
+
+

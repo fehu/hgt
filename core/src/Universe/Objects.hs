@@ -83,7 +83,7 @@ class (Any obj d coordSys) =>
    --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
                             -- --- --- -- --- --- --
 
-class StellarSystem obj d id body where
+class (Any body d coordSys) => StellarSystem obj d coordSys id body where
     systemId :: obj -> id
     bodies   :: obj -> [body]
 

@@ -22,7 +22,7 @@ data Rect a = Rect { topLeft       :: Point a
 
 
 -- `algebra` package breaks some dpendencies, so ...
-class (Num a) => HasZero a where
+class HasZero a where --  (Num a) =>
     zero :: a
 
 scalaGroupBy :: (Ord b) => (a -> b) -> [a] -> [[a]]

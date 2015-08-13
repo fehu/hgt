@@ -23,6 +23,8 @@ module Measures(
 
 , I1(..)
 , I2(..)
+, I3(..)
+, I4(..)
 
 , D' , d'
 , D'', d''
@@ -31,6 +33,7 @@ module Measures(
 , Speed(..)
 , Acceleration(..)
 , Force(..)
+, Impulse(..)
 , Energy(..)
 ------------------
 
@@ -65,6 +68,7 @@ class (Measure m) => Measured a d m where
 --instance Measure DimensionlessMeasure
 
 data MeasuredVal d m = MeasuredVal d m
+
 
 instance (Measure m) => Measured (MeasuredVal d m) d m where
     measured measure value = MeasuredVal value measure

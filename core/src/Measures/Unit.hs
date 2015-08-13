@@ -31,6 +31,7 @@ module Measures.Unit (
 , Speed(..)
 , Acceleration(..)
 , Force(..)
+, Impulse(..)
 , Energy(..)
 
 ) where
@@ -110,5 +111,6 @@ d'' u = u :/ Time:^I2
 data Speed        = Speed
 data Acceleration = Acceleration
 data Force        = Force
+data Impulse      = Impulse
 data Energy       = Energy
 

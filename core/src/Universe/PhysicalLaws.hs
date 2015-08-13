@@ -11,7 +11,6 @@ module Universe.PhysicalLaws (
 
 import Measures
 
-
 --class (Measure m) => GravityField obj m where
 --    gravityPotential :: obj a -> m
 
