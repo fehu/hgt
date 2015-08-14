@@ -18,7 +18,6 @@ library
                    core-universe == 0.0.1,
                    uuid         -any
     exposed-modules: CelestialObjects
-                     Measures2
                      U
     exposed: True
     buildable: True
