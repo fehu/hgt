@@ -57,20 +57,29 @@ data StarDescriptor d = StarDescriptor { starMass   :: d -- Mass
                                        }
                       deriving Show
 
+mapBinOperator op f x y = op (f x) (f y)
+
 
 instance HasZero Double where
     zero = 0
 
 instance Body Star d where
---    mass = starMass . starDescriptor
-    mass Star{starDescriptor=StarDescriptor{starMass=m}} = m
+    id   = starId
+    mass = starMass . starDescriptor
 
 instance StellarBody Star d
-instance Eq (Star d)
 
-instance Body Planet d
+instance Eq (Star d) where
+    (==) = mapBinOperator (==) starId
+
+instance Body Planet d where
+    id = planetId
+    mass = planetMass . planetDescriptor
+
 instance StellarBody Planet d
-instance Eq (Planet d)
+
+instance Eq (Planet d) where
+    (==) = mapBinOperator (==) planetId
 
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
@@ -118,8 +127,9 @@ data System d = System { systemId         :: UUID
                        , stellarBodies    :: [StellarBodyState d]
                        , artificialBodies :: [(ArtificialContainer d, Position d)]
                        }
+              deriving Show
 
-
+copySystem (System id _ _) = System id
 
 class Body body d where
     id      :: body d -> UUID
@@ -132,39 +142,38 @@ class (Body body d) => ArtificialBody body d where
 instance Eq (StellarBodyContainer d) where
     StellarBodyContainer{getStellarBody=x} == StellarBodyContainer{getStellarBody=y} = U.id x == U.id y
 
-data StellarBodyContainer d = forall body. (HasZero d, Eq (body d), StellarBody body d)
+data StellarBodyContainer d = forall body. (HasZero d, Eq (body d), Show (body d), StellarBody body d)
     => StellarBodyContainer {
         getStellarBody :: body d
        }
-data ArtificialContainer d  = forall body. (HasZero d, Eq (body d), ArtificialBody body d)
+
+data ArtificialContainer d  = forall body. (HasZero d, Eq (body d), Show (body d), ArtificialBody body d)
     => ArtificialContainer {
         getArtificialBody :: body d
        }
+
+instance Show (StellarBodyContainer d) where
+    show (StellarBodyContainer b) = show b
+
+instance Show (ArtificialContainer d) where
+    show (ArtificialContainer b) = show b
 
 
 type Effect a d = a -> a -> Interaction d
 
 
-class HasPosition a where
-    position :: a -> Vector d {- Distance -}
-    distance :: a -> a -> Vector d -- Distance
-
---numF2'' :: () -> () -> Effect a d -> Effect a d -> Effect a d
---numF2'' f1 f2 e1 e2 a b =(f1 x1 y1, f2 x2 y2) :: Interaction d
---                   where (x1, x2) = e1 a b
---                         (y1, y2) = e2 a b
-
---instance Num (Effect a d) where
---    (+) = numF2'' (+) (+)
+class HasPosition sys a d where
+    position :: sys d -> a d -> Vector d {- Distance -}
+    distance :: sys d -> a d -> a d -> Vector d -- Distance
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
-class SystemExec sys where
-    execInteractions :: sys -> d -- Time -> sys
+class SystemExec sys d where
+    execInteractions :: sys d -> d {- Time -} -> sys d
 
-instance SystemExec (System d) where
-    execInteractions = undefined
-
+class SystemExecCache sys d where
+    systemStellarStates     :: sys d -> [StellarBodyState d]
+--    systemArtificialStates  :: sys d -> [ArtificialBodyState d]
 
 instance Body StellarBodyContainer d where
     id (StellarBodyContainer body) = U.id body
@@ -185,15 +194,15 @@ interact zero effects x y = foldr (+) (zeroVec, zeroVec) interractions
                             where zeroVec       = (zero, zero)
                                   interractions = map (($ x) . ($ y)) effects
 
-effects :: (Body a d, HasPosition (a d), Floating d, HasZero d) => (?g :: d) => [Effect (a d) d]
-effects = [gravityEffect]
+effects :: (Body a d, HasPosition sys a d, Floating d, HasZero d) => (?g :: d) => sys d -> [Effect (a d) d]
+effects sys = map ($ sys) [gravityEffect]
 
-calculateInteractions :: (HasPosition (StellarBodyContainer d), Floating d, HasZero d) =>
+calculateInteractions :: (SystemExecCache System d, HasPosition System StellarBodyContainer d, Floating d, HasZero d) =>
                          (?g :: d) =>
                          System d -> d {- Time -} -> [StellarBodyState d]
 calculateInteractions sys time = do (a, (_, ap)) <- stellarBodies sys --TODO
                                     (b, _) <- stellarBodies sys
-                                    let (force, imp) = U.interact (zeroFor a) effects a b
+                                    let (force, imp) = U.interact (zeroFor a) (effects sys) a b
                                     if a /= b then return $ calculateMovement time (a, (force, imp, ap))
                                               else mzero
 
@@ -209,9 +218,9 @@ calculateMovement time (obj, (force, imp, pos)) = (obj, (impulse, position)) -- 
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
-gravityEffect ::  (Body a d, HasPosition (a d), Floating d, HasZero d) => (?g :: d) => Effect (a d) d
-gravityEffect x y = (force, (zero, zero))
-                 where dist     = distance x y
+gravityEffect ::  (Body a d, HasPosition sys a d, Floating d, HasZero d) => (?g :: d) => sys d -> Effect (a d) d
+gravityEffect sys x y = (force, (zero, zero))
+                 where dist     = distance sys x y
                        forceAbs = ?g * mass x * mass y / vecAbs dist ** 2
                        norm     = vecNorm dist
                        force    = vecF (forceAbs *) norm
@@ -224,9 +233,19 @@ impactEffect x y = ((zero, zero), impulse)
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
--- systemId         :: UUID
---                       , stellarBodies    :: [StellarBodyState d]
---                       , artificialBodies :: [(ArtificialContainer d, Position d)]
+instance (SystemExecCache sys d) => HasPosition sys StellarBodyContainer d where
+
+--systemStellarStates sys
+
+doubleG = 6.674e-11 :: Double -- Force :* Distance:^I2 :/ Mass:^I2
+
+instance SystemExecCache System Double
+
+instance SystemExec System Double where
+    execInteractions sys time = copySystem sys [] []
+                              where interactionResult = let ?g = doubleG
+                                                        in calculateInteractions sys time
+
 
 
 main :: IO()
@@ -244,7 +263,9 @@ main = do Just starId <- nextUUID
           Just systemId <- nextUUID
           let system = System systemId [starC, planetC] []
 
-          putStrLn "A"
+          putStrLn $ "init: " ++ show system
+
+--          let sys2 =
 
 
 
