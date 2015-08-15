@@ -17,6 +17,10 @@ library
                    core          == 0.0.1,
                    uuid         -any
     exposed-modules: U
+                        U.Defs
+                        U.Objects
+                        U.Exec
+                            U.Exec.Double
     exposed: True
     buildable: True
     hs-source-dirs: src
