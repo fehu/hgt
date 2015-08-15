@@ -1,4 +1,4 @@
-name: space-test
+name: space-independent
 version: 0.0.1
 cabal-version: >=1.6
 build-type: Simple
@@ -15,13 +15,13 @@ library
                    OpenGL       -any,
                    GLUT         -any,
                    core          == 0.0.1,
-                   core-universe == 0.0.1
-    exposed-modules: CelestialObjects
+                   uuid         -any
+    exposed-modules: U
     exposed: True
     buildable: True
     hs-source-dirs: src
 
-executable space-test
+executable space-undep
     build-depends: base -any
     main-is: Main.hs
     buildable: True

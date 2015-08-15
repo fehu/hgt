@@ -1,0 +1,14 @@
+Version of workspace file format:
+               2
+Time of storage:
+               "Sat Aug 15 14:49:23 CDT 2015"
+Name of the workspace:
+               "ws-space"
+File paths of contained packages:
+               ["space-independent/space-independent.cabal","core/core.cabal"]
+Maybe file path of an active package:
+               Just "space-independent/space-independent.cabal"
+Maybe name of an active executable:
+               Nothing
+Version Control System configurations for packages:
+               fromList []
