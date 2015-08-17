@@ -9,9 +9,10 @@ module U.Exec.Double (
 import U.Objects
 import U.Exec
 
-doubleG = 6.674e-11 :: Double -- Force :* Distance:^I2 :/ Mass:^I2
+doubleG = GravitationalConstant 6.674e-11 -- Force :* Distance:^I2 :/ Mass:^I2
 
 instance SystemExecCache System Double
+--    systemStellarStates sys =
 
 instance SystemExec System Double where
     execInteractions sys time = copySystem sys [] []

@@ -8,6 +8,9 @@ module U.Exec (
 , SystemExecCache(..)
 , calculateInteractions
 
+--TODO move it
+, GravitationalConstant(..)  -- Force :* Distance:^I2 :/ Mass:^I2
+
 ) where
 
 import Control.Monad (mzero)
@@ -16,6 +19,7 @@ import Utils
 
 import U.Defs
 import U.Objects
+--import U.Exec.Mutable
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
@@ -23,11 +27,19 @@ class SystemExec sys d where
     execInteractions :: sys d -> d {- Time -} -> sys d
 
 class SystemExecCache sys d where
-    systemStellarStates     :: sys d -> [StellarBodyState d]
+    systemStellarStates :: sys d -> [StellarBodyEntry d]
+    systemStellarState  :: sys d -> StellarBodyContainer d -> BodyState d
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
-instance (SystemExecCache sys d) => HasPosition sys StellarBodyContainer d where
+data GravitationalConstant d = GravitationalConstant { getG :: d }  -- Force :* Distance:^I2 :/ Mass:^I2
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+instance (SystemExecCache sys d, Num d) => HasPosition sys StellarBodyContainer d where
+    position sys = snd . systemStellarState sys
+    distance sys x y = c x - c y
+                    where c = position sys
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
@@ -40,13 +52,15 @@ zeroFor :: StellarBodyContainer d -> d
 zeroFor (StellarBodyContainer d) = zero
 
 -- !!!! --
-effects :: (Body a d, HasPosition sys a d, Floating d, HasZero d) => (?g :: d) => sys d -> [Effect (a d) d]
+effects :: (Body a d, HasPosition sys a d, Floating d, HasZero d) =>
+           (?g :: GravitationalConstant d) =>
+        sys d -> [Effect (a d) d]
 effects sys = map ($ sys) [gravityEffect]
 -- !!!! --
 
 calculateInteractions :: (SystemExecCache System d, HasPosition System StellarBodyContainer d, Floating d, HasZero d) =>
-                         (?g :: d) =>
-                         System d -> d {- Time -} -> [StellarBodyState d]
+                         (?g :: GravitationalConstant d) =>
+                         System d -> d {- Time -} -> [StellarBodyEntry d]
 calculateInteractions sys time = do (a, (_, ap)) <- stellarBodies sys --TODO
                                     (b, _) <- stellarBodies sys
                                     let (force, imp) = U.Exec.interact (zeroFor a) (effects sys) a b
@@ -65,10 +79,12 @@ calculateMovement time (obj, (force, imp, pos)) = (obj, (impulse, position)) -- 
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
-gravityEffect ::  (Body a d, HasPosition sys a d, Floating d, HasZero d) => (?g :: d) => sys d -> Effect (a d) d
+gravityEffect ::  (Body a d, HasPosition sys a d, Floating d, HasZero d) =>
+                  (?g :: GravitationalConstant d) =>
+              sys d -> Effect (a d) d
 gravityEffect sys x y = (force, (zero, zero))
                  where dist     = distance sys x y
-                       forceAbs = ?g * mass x * mass y / vecAbs dist ** 2
+                       forceAbs = getG ?g * mass x * mass y / vecAbs dist ** 2
                        norm     = vecNorm dist
                        force    = vecF (forceAbs *) norm
 
@@ -80,6 +96,10 @@ impactEffect x y = ((zero, zero), impulse)
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
-
+--instance SystemMExec (MSystem StellarBodyContainer ArtificialContainer) StellarBodyContainer ArtificialContainer d where
+--    guardStellarInteraction = upd
+                                            -- TODO other factors, like mass loss
+--                                            return ()
+--    execInteractions sys time =
 
 

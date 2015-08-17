@@ -20,6 +20,8 @@ library
                         U.Defs
                         U.Objects
                         U.Exec
+                            U.Exec.Mutable
+                            U.Exec.Mutable.Impl
                             U.Exec.Double
     exposed: True
     buildable: True

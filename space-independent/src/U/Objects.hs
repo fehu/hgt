@@ -13,7 +13,9 @@ module U.Objects (
 
 , System(..)
 , copySystem
-, StellarBodyState
+
+, StellarBodyEntry
+, BodyState
 
 ) where
 
@@ -83,10 +85,12 @@ instance StellarBody Star d
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
-type StellarBodyState d = (StellarBodyContainer d, (Vector d, Position d))
+type BodyState d = (Vector d, Position d)
+
+type StellarBodyEntry d = (StellarBodyContainer d, BodyState d)
 
 data System d = System { systemId         :: UUID
-                       , stellarBodies    :: [StellarBodyState d]
+                       , stellarBodies    :: [StellarBodyEntry d]
                        , artificialBodies :: [(ArtificialContainer d, Position d)]
                        }
               deriving Show
