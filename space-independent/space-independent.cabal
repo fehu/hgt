@@ -23,6 +23,8 @@ library
                             U.Exec.Mutable
                             U.Exec.Mutable.Impl
                             U.Exec.Double
+                     Vis
+                        Vis.Impl
     exposed: True
     buildable: True
     hs-source-dirs: src

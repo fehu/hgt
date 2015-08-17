@@ -27,8 +27,8 @@ run stateIO display change callbacks world = do
                         getArgsAndInitialize
                         _window <- createWindow "Test"
 
-                        worldM   <- newIORef world
-                        state <- stateIO
+                        worldM <- newIORef world
+                        state  <- stateIO
 
                         let applyCallback f = f _window state
 
