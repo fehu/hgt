@@ -24,8 +24,6 @@ import Data.Functor ((<$>))
 
 
 import Control.Monad (join)
---import GHC.Ptr
---import Foreign.Storable
 import Data.IORef
 
 import U.Objects as O
@@ -148,7 +146,9 @@ instance (Body body d, Body obj d) => BasicSystem            (MSystem body obj) 
 instance (Body body d)             => MutableSystemInterface (MSystem body obj) body     d where
                                         add = mAdd mStellarBodies
                                         rm  = mRm  mStellarBodies
-                                        upd = mUpdState mLookupStellarEntry
+                                        upd sys x s = do _ <- mUpdState mLookupStellarEntry sys x s
+                                                         _ <- meUpd mLookupStellarEntry mPtr sys x (const x)
+                                                         return ()
                                         updBody     = meUpd mLookupStellarEntry mPtr
                                         updImpulse  = meUpd mLookupStellarEntry mImpulse
                                         updPosition = meUpd mLookupStellarEntry mPosition

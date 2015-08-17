@@ -30,30 +30,34 @@ interactObj zero effects x y = foldr (+) (zeroVec, zeroVec) interractions
 calculateMovement :: (Body body d, Fractional d) =>
                         d {- Time -}
                         -> (body d, (Vector d {- Force -}, Vector d {- Impulse -}, Position d))
-                        -> (body d, (Vector d {- Impulse -}, Position d))
+                        -> (body d, BodyState d)
 calculateMovement time (obj, (force, imp, pos)) = (obj, (impulse, position)) -- TODO collisions
                                             where impulse  = imp + vecF (time *) force
                                                   position = pos + vecF (\x -> x / mass obj * time) impulse
 
-calculateInteractions :: ( MutableSystem sys StellarBodyContainer ArtificialContainer d
+calculateStellarInteractions :: ( MutableSystem sys StellarBodyContainer ArtificialContainer d
                          , HasPosition sys StellarBodyContainer d
                          , Floating d
                          , HasZero d) =>
                             ( ?g :: GravitationalConstant d
                             , ?effects :: [Effect (StellarBodyContainer d) d])
-                                => sys d -> d {- Time -} -> IO [StellarBodyEntry d]
+                                => (StellarBodyEntry d -> IO (StellarBodyEntry d))
+                                    -> sys d
+                                    -> d {- Time -}
+                                    -> IO [StellarBodyEntry d]
 
-calculateInteractions = calculateInteractions' (\a b -> interactObj (zeroForS a) ?effects a b)
+calculateStellarInteractions = calculateInteractions (\a b -> interactObj (zeroForS a) ?effects a b)
 
-calculateInteractions' f sys time = do get <- E.fullList sys
-                                       let l = do (a, (_, ap)) <- get
-                                                  (b, _)       <- get
-                                                  let (force, imp) = f a b
-                                                  if a /= b then return $ calculateMovement time (a, (force, imp, ap))
-                                                            else mzero
-                                       return l
+calculateInteractions f g sys time = do get <- E.fullList sys
+                                        let l = do (a, (_, ap)) <- get
+                                                   (b, _)       <- get
+                                                   let (force, imp) = f a b
+                                                   if a /= b then return (g $ calculateMovement time (a, (force, imp, ap)))
+                                                             else mzero
+                                        sequence l
 
-
+applyStellarInteractions sys = calculateStellarInteractions f sys
+                        where f p = uncurry (upd sys) p >> return p
 
 
 
